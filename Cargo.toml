@@ -1,0 +1,14 @@
+[package]
+name = "metricslib"
+version = "0.1.0"
+authors = ["Julaiti Alafate <jalafate@gmail.com>"]
+
+[lib]
+name = "metricslib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "run_metrics"
+path = "src/bin.rs"
+
+[dependencies]
