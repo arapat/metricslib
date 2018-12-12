@@ -33,8 +33,12 @@ pub fn validate(
 
     let sorted_scores_labels = {
         let mut scores_labels: Vec<(f32, f32)> = vec![];
-        let (mut score, mut label) = (String::new(), String::new());
-        while test_reader.read_line(&mut label).is_ok() {
+        loop {
+            let mut line = String::new();
+            if test_reader.read_line(&mut line).is_err() || line.trim() == "" {
+                break;
+            }
+            let label = line.split(' ').next().unwrap().trim();
             let binary_label = {
                 if label == *positive_str {
                     1.0
@@ -42,8 +46,13 @@ pub fn validate(
                     -1.0
                 }
             };
+
+            let mut score = String::new();
             pred_reader.read_line(&mut score).unwrap();
-            scores_labels.push((score.parse().unwrap(), binary_label));
+            scores_labels.push((
+                score.trim().to_string().parse().expect(&format!("Cannot parse `{}`", score)),
+                binary_label,
+            ));
         }
         scores_labels.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap().reverse());
         scores_labels

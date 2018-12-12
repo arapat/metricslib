@@ -11,9 +11,9 @@ fn main() {
 
     let args: Vec<String> = env::args().collect();
     let parsed_args = parse_args(args);
-    let usage_info = "Usage: ./metricslib --test <testing data path>
-                      --scores <model predictions path>
-                      --positive <label for the positive examples>";
+    let usage_info = "Usage: ./metricslib --test <testing data path> \\
+                    --scores <model predictions path> \\
+                    --positive <label for the positive examples>";
     if parsed_args.is_none() {
         println!("Parameters are invalid.");
         println!("{}", usage_info);
@@ -35,17 +35,17 @@ fn main() {
 }
 
 
-fn parse_args(args: Vec<String>) -> Option<HashMap<&'static str, String>> {
+fn parse_args(args: Vec<String>) -> Option<HashMap<String, String>> {
     let mut k = 1;
     let mut parsed = HashMap::new();
     while k < args.len() {
         match args[k].as_ref() {
             "--test" | "--scores" | "--positive" => {
-                parsed.insert("test", args[k + 1][2..].to_string());
+                parsed.insert(args[k][2..].to_string(), args[k + 1].to_string());
                 k += 2;
             },
             "--help" => {
-                parsed.insert("help", "HELP".to_string());
+                parsed.insert("help".to_string(), "HELP".to_string());
                 k += 1;
             },
             _ => {
