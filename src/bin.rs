@@ -3,7 +3,7 @@ extern crate metricslib;
 use std::collections::HashMap;
 use std::env;
 use metricslib::EvalFunc;
-use metricslib::validate;
+use metricslib::validate_from_file;
 
 
 fn main() {
@@ -27,8 +27,10 @@ fn main() {
         println!("Parameters are invalid.");
         println!("{}", usage_info);
     } else {
-        let perf = validate(parsed_args.get("test").unwrap(), parsed_args.get("scores").unwrap(),
-                            eval_funcs, parsed_args.get("positive").unwrap());
+        let perf = validate_from_file(parsed_args.get("test").unwrap(),
+                                      parsed_args.get("scores").unwrap(),
+                                      &eval_funcs,
+                                      parsed_args.get("positive").unwrap());
         let perf: Vec<String> = perf.iter().map(|t| t.to_string()).collect();
         println!("{}", perf.join(", "));
     }

@@ -18,10 +18,10 @@ pub enum EvalFunc {
 }
 
 
-pub fn validate(
+pub fn validate_from_file(
     testing_filename: &String,
     prediction_filename: &String,
-    eval_funcs: Vec<EvalFunc>,
+    eval_funcs: &Vec<EvalFunc>,
     positive_str: &String,
 ) -> Vec<f32> {
     let f_test = File::open(testing_filename.clone())
@@ -57,7 +57,11 @@ pub fn validate(
         scores_labels.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap().reverse());
         scores_labels
     };
+    validate(&sorted_scores_labels, eval_funcs)
+}
 
+
+pub fn validate(sorted_scores_labels: &Vec<(f32, f32)>, eval_funcs: &Vec<EvalFunc>) -> Vec<f32> {
     let scores: Vec<f32> =
         eval_funcs.iter()
                   .map(|func| {
